@@ -11,7 +11,7 @@
   
   *Making complex vegetation data accessible to everyone - from scientists to children*
   
-  [🚀 Live Demo](#) | [🔗 Bloomy ETL](https://github.com/TellusOne/bloomy-etl)
+  [🚀 Live Demo](https://bloomy-frontend.vercel.app/) | [🔗 Bloomy ETL](https://github.com/TellusOne/bloomy-etl)
 </div>
 
 ---
