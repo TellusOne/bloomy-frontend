@@ -83,9 +83,9 @@ Scientists use satellite data daily to monitor vegetation, crop health, and clim
 git clone https://github.com/TellusOne/bloomy-frontend
 ```
 
-2. **Install dependencies**
+2. **Install dependencies?**
 ```bash
-copy or paste all files on nginx index.html folder 
+no, only copy or paste all files on nginx index.html folder or another tiny webserver software
 ```
 
 
@@ -102,7 +102,7 @@ public/datasets/01/
 
 6. **Open in browser**
 ```
-http://localhost:0000?
+http://localhost:0000(the port of your web server)
 ```
 
 ---
