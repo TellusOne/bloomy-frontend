@@ -1,14 +1,14 @@
 import { getDeviceLocationOrDefault } from "./location.js";
 import { createMarkerLayer } from "./graphics.js";
-import { waitForStableRender } from "./utils.js";
 import { createPolygonSketch, createSketchButton } from "./sketch.js";
+import { loadDatasetConfig, createDatasetLayer } from "./dataset.js";
+import { createTimeLapseControl } from "./timelapse.js";
 
 const [Map, SceneView, GraphicsLayer] = await $arcgis.import([
   "@arcgis/core/Map.js",
   "@arcgis/core/views/SceneView.js",
   "@arcgis/core/layers/GraphicsLayer.js"
 ]);
-
 
 const map = new Map({
   basemap: "satellite",
@@ -25,23 +25,46 @@ map.add(processedLayer);
 const view = new SceneView({
   container: "viewDiv",
   map,
-  center: [0, 0],
   ui: { components: [] },
   qualityProfile: "high",
-  camera: { position: { longitude: 0, latitude: 0, z: 25000000 }, tilt: 0 }
+  camera: { 
+    position: { 
+      longitude: -52, 
+      latitude: -29, 
+      z: 10000000 
+    }, 
+    tilt: 0 
+  }
 });
 
-// Logo
 const logoDiv = document.createElement("div");
 logoDiv.id = "logo-global";
 logoDiv.innerHTML = `<img src="./public/logo.svg" style="width:100px;">`;
 view.ui.add(logoDiv, "top-left");
 
-view.when(async () => {
-  console.log("SceneView inicializada — aguardando render estável...");
-  await waitForStableRender(view);
-  console.log("Tiles realmente carregados!");
+// Wait for tiles to load with timeout
+async function waitForStableRender(view, maxWait = 5000) {
+  console.log("Waiting for tiles to load...");
+  const startTime = Date.now();
   
+  return new Promise((resolve) => {
+    const checkUpdating = () => {
+      if (!view.updating || (Date.now() - startTime) > maxWait) {
+        console.log("Tiles loaded or timeout reached");
+        resolve();
+      } else {
+        requestAnimationFrame(checkUpdating);
+      }
+    };
+    checkUpdating();
+  });
+}
+
+view.when(async () => {
+  console.log("SceneView ready");
+
+  // Wait for initial tiles
+  await waitForStableRender(view);
 
   const loading = document.getElementById("loading");
   if (loading) {
@@ -50,18 +73,39 @@ view.when(async () => {
     setTimeout(() => loading.remove(), 600);
   }
 
-  // Criar ferramenta de sketch com ambos os layers
+  try {
+    const config = await loadDatasetConfig("01");
+    console.log("Config loaded:", config.center);
+    
+    const datasetController = await createDatasetLayer(view, config);
+    console.log("Dataset controller created");
+    
+    map.add(datasetController.layer);
+    map.add(datasetController.markerLayer);
+    console.log("Layers added");
+
+    await datasetController.updateToDate(0);
+    console.log("First frame loaded");
+    
+    createTimeLapseControl(view, datasetController);
+    console.log("TimeLapse control created");
+    
+    // Navigate to dataset location
+    await view.goTo({
+      center: [config.center.lon, config.center.lat],
+      zoom: 16,
+      tilt: 45
+    }, {
+      duration: 3000
+    });
+    console.log("Navigation complete");
+    
+  } catch (error) {
+    console.error("ERROR WHEN DATASET LOADED:");
+    console.error("  - Message:", error.message);
+    console.error("  - Stack:", error.stack);
+  }
+
   const sketch = await createPolygonSketch(view, sketchLayer, processedLayer);
   createSketchButton(view, sketch);
-
-  const coords = await getDeviceLocationOrDefault(3000);
-  console.log("Usando coordenadas:", coords);
-
-  
-
-  await view.goTo({
-    position: { longitude: coords.longitude, latitude: coords.latitude, z: 10000000 },
-    tilt: 1,
-    duration: 4000
-  }, { easing: "ease-out-in" });
 });

@@ -43,13 +43,11 @@ export async function createPolygonSketch(view, graphicsLayer, processedLayer) {
                     }]
                 };
 
-                // Selecionar o gráfico para edição
                 sketch.update(graphic);
             }
         }
     });
 
-    // Adicionar botão quando entrar em modo de atualização
     sketch.on("update", (event) => {
         if (event.state === "start" && !processButton) {
             createProcessButton(view, sketch, graphicsLayer, processedLayer, event.graphics[0]);
@@ -77,7 +75,6 @@ export async function createPolygonSketch(view, graphicsLayer, processedLayer) {
       `;
 
         processButton.onclick = async () => {
-            // Clonar o gráfico com nova cor
             const processedGraphic = graphic.clone();
             processedGraphic.symbol = {
                 type: "polygon-3d",
@@ -91,16 +88,12 @@ export async function createPolygonSketch(view, graphicsLayer, processedLayer) {
                 }]
             };
 
-            // Remover o gráfico do layer do sketch
             graphicsLayer.remove(graphic);
 
-            // Adicionar ao layer de processados (não editável)
             processedLayer.add(processedGraphic);
 
-            // Cancelar edição
             sketch.cancel();
 
-            // Converter para GeoJSON
             const geometry = processedGraphic.geometry;
             const geoGeometry = webMercatorUtils.webMercatorToGeographic(geometry);
 
@@ -115,7 +108,6 @@ export async function createPolygonSketch(view, graphicsLayer, processedLayer) {
                 }
             };
 
-            console.log("Polígono processado (GeoJSON):");
             console.log(JSON.stringify(geojson, null, 2));
 
             removeProcessButton();
@@ -163,7 +155,6 @@ export function createSketchButton(view, sketch) {
 
     button.onclick = () => {
         if (!isDrawing) {
-            // Iniciar desenho
             isDrawing = true;
             button.innerHTML = cancelSVG;
             button.style.background = "rgba(220, 38, 38, 0.50)";

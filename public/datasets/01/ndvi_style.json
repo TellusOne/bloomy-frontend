@@ -1,0 +1,68 @@
+{
+  "name": "NDVI_Style",
+  "description": "Default NDVI color ramp",
+  "type": "ClassBreaks",
+  "field": "Band_1",
+  "classes": [
+    {
+      "min": -0.2,
+      "max": 0.0,
+      "color": [
+        139,
+        0,
+        0
+      ],
+      "label": "Very Low"
+    },
+    {
+      "min": 0.0,
+      "max": 0.2,
+      "color": [
+        205,
+        133,
+        63
+      ],
+      "label": "Low"
+    },
+    {
+      "min": 0.2,
+      "max": 0.4,
+      "color": [
+        255,
+        255,
+        0
+      ],
+      "label": "Moderate"
+    },
+    {
+      "min": 0.4,
+      "max": 0.6,
+      "color": [
+        173,
+        255,
+        47
+      ],
+      "label": "Moderate-High"
+    },
+    {
+      "min": 0.6,
+      "max": 0.8,
+      "color": [
+        34,
+        139,
+        34
+      ],
+      "label": "High"
+    },
+    {
+      "min": 0.8,
+      "max": 1.0,
+      "color": [
+        0,
+        100,
+        0
+      ],
+      "label": "Very High"
+    }
+  ]
+}

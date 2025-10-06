@@ -14,7 +14,6 @@ html, body, #viewDiv {
   }
 
 
-/* Tela de loading */
 #loading {
     position: fixed;
     top: 0; left: 0;
@@ -27,9 +26,6 @@ html, body, #viewDiv {
     transition: opacity 1s ease;
   }
 
-
-  
-/* Logo SVG centralizado com sombra amarelada pulsante */
 #loading .logo {
     position: relative;
     z-index: 2;
@@ -40,7 +36,6 @@ html, body, #viewDiv {
     animation: pulse-shadow 1.5s infinite alternate;
   }
   
-  /* Animação da sombra pulsando */
   @keyframes pulse-shadow {
     0% {
       filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.5)) 
@@ -59,16 +54,14 @@ html, body, #viewDiv {
     }
   }
   
-  /* Fade-out do loading */
   #loading.hidden {
     opacity: 0;
     pointer-events: none;
   }
   
-  /* Quando quiser esconder o loading */
   #loading.hidden {
     opacity: 0;
-    pointer-events: none; /* evita clique */
+    pointer-events: none; 
   }
 
   #loading{
@@ -94,19 +87,18 @@ font-family: "Codec-Cold-Regular-trial";
 font-size: 17.647px;
 font-style: normal;
 font-weight: 700;
-line-height: 35.294px; /* 200% */
+line-height: 35.294px; 
   }
 
 
 
-/* estilos componente globo */
 .esri-view {
     --esri-view-outline-color: none;
   }
   #logo {
-    user-select: none;       /* não seleciona texto */
-    -webkit-user-drag: none; /* não arrasta a imagem no Safari/Chrome */
-    touch-action: none;      /* impede comportamento padrão de toque */
+    user-select: none;      
+    -webkit-user-drag: none; 
+    touch-action: none;      
   }
 
 
